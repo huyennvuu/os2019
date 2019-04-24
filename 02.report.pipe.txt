@@ -11,3 +11,4 @@ grep -c ^processor /proc/cpuinfo
 
 find ~/Pictures/ -name *.jpg | wc -l
 ->    6
+0
