@@ -1,0 +1,13 @@
+ls | grep list
+
+ect/passwd | wc -l
+->    40
+
+free -m | grep Mem | awk '{print $2}'
+->    7719
+
+grep -c ^processor /proc/cpuinfo 
+->    8
+
+find ~/Pictures/ -name *.jpg | wc -l
+->    6
