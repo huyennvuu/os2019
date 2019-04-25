@@ -2,32 +2,35 @@
 #include <unistd.h>
 #include <wait.h>
 
-int main(){
+int main()
+{
   int status, pid1, pid2;
-  printf("This is main before fork()\n");
+  printf("Main before fork()\n");
   pid1 = fork();
-  if(pid1 == 0){
-    printf("\tThis is the first child\n\tNow run \"ps -ef\"\n");
-    char* args[] = {"/bin/ps", "-ef", NULL};
-    if(execvp("/bin/ps", args) < 0){
-      printf("Fail to execute \"ps -ef\"\n");
-    }
+  if(pid1 == 0)
+  {
+    printf("I am the first child\nNow run ps -ef\n");
+    char *args[]= {"/bin/ps", "-ef", NULL};
+    execvp("/bin/ps", args);
+    printf("Finished runing ps -ef\n");
   }
-  else {
+  else 
+  {
     waitpid(pid1, NULL, 0);
-    printf("This is parent after fork, child is %d\n\tContinue to create another child\n", pid1);
+    printf("I am parent after fork, child is %d\n\tContinue to create another child\n", pid1);
     pid2 = fork();
-    if(pid2 == 0){
-      printf("\tThis is the second child\n\tNow run \"free -h\"\n");
+    if(pid2 == 0)
+    {
+      printf("I am the second child\nNow run free -h\n");
       char* args[] = {"/usr/bin/free", "-h", NULL};
-      if(execvp("/usr/bin/free", args) < 0){
-        printf("Fail to execute \"free -h\"\n");
-      }
+      execvp("/usr/bin/free", args);
+      printf("Finished running free -h\n");
     }
-    else {
-      printf("This is parent after 2 forks, second child is %d\nNothing to do more.\n", pid2);
+   }
+   else 
+   {
+      printf("I am parent after 2 forks, second child is %d\nDone.\n", pid2);
       waitpid(pid2, NULL, 0);
-    }
-  }
+   }
   return 0;
 }
