@@ -1,0 +1,6 @@
+ps -e | grep firefox
+    ->  2238
+ps -o nlwp 2238
+    ->  75
+
+
