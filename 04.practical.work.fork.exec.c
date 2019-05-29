@@ -1,36 +1,32 @@
 #include <stdio.h>
 #include <unistd.h>
-#include <wait.h>
+#include <sys/wait.h>
 
-int main()
+int main(int argc, char const *argv[])
 {
-  int status, pid1, pid2;
-  printf("Main before fork()\n");
-  pid1 = fork();
-  if(pid1 == 0)
-  {
-    printf("I am the first child\nNow run ps -ef\n");
-    char *args[]= {"/bin/ps", "-ef", NULL};
-    execvp("/bin/ps", args);
-    printf("Finished runing ps -ef\n");
-  }
-  else 
-  {
-    waitpid(pid1, NULL, 0);
-    printf("I am parent after fork, child is %d\n\tContinue to create another child\n", pid1);
-    pid2 = fork();
-    if(pid2 == 0)
-    {
-      printf("I am the second child\nNow run free -h\n");
-      char* args[] = {"/usr/bin/free", "-h", NULL};
-      execvp("/usr/bin/free", args);
-      printf("Finished running free -h\n");
-    }
-   }
-   else 
-   {
-      printf("I am parent after 2 forks, second child is %d\nDone.\n", pid2);
-      waitpid(pid2, NULL, 0);
-   }
-  return 0;
+	int forkval = fork();
+	if(forkval == 0)
+	{
+		printf("Hello, I'm a child :3. I'm launching ps -ef\n");
+		char *args[] = {"ps","-ef",NULL};
+		execvp("ps",args);
+	} 
+	else{
+		printf("Parent hereeee!!\n");
+		wait(NULL);
+		forkval = fork();
+		if (forkval == 0)
+		{
+			printf("Hey, I'm a child, launching free -h\n");
+			char *args[]= { "free", "-h" , NULL};
+			execvp("free", args);
+		}
+		else
+		{
+			printf("I'm Parent!!\n");
+			wait(NULL);
+		}
+	}
+
+	return 0;
 }
